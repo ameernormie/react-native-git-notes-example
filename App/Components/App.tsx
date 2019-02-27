@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import { NavigationScreenProps } from "react-navigation";
-import AppContainer from "../Navigation/AppNavigation";
+import React, { Component } from 'react';
+import { NavigationScreenProps } from 'react-navigation';
+import AppContainer from '../Navigation/AppNavigation';
 // import createStore from './../Redux';
 // import { Provider } from 'react-redux';
 
