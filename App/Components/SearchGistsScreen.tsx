@@ -9,51 +9,30 @@ import {
 } from "react-native";
 import { NavigationScreenProps } from "react-navigation";
 
-interface GitCredentialProps {
+interface SearchGistsProps {
   navigation: NavigationScreenProps;
 }
 
-interface GitCredentialState {
+interface SearchGistsState {
   username: string;
   password: string;
 }
 
-class GitCredentialsScreen extends React.Component<
-  GitCredentialProps,
-  GitCredentialState
+class SearchGistsScreen extends React.Component<
+  SearchGistsProps,
+  SearchGistsState
 > {
   state = {
     username: "",
     password: ""
-  };
-  onUsernameChange = ({ nativeEvent: { text } }): void => {
-    this.setState(() => ({ username: text }));
-  };
-  onPasswordChange = ({ nativeEvent: { text } }): void => {
-    this.setState(() => ({ password: text }));
-  };
-  navigateToNotebookHome = e => {
-    this.props.navigation.navigate("NotebookHome");
   };
   render() {
     return (
       <View style={styles.landingContainer}>
         <TextInput
           style={styles.credentialFields}
-          onChange={this.onUsernameChange}
-          placeholder="Username"
+          placeholder="Search By Gist ID"
         />
-        <TextInput
-          style={styles.credentialFields}
-          onChange={this.onPasswordChange}
-          placeholder="Password"
-        />
-        <TouchableHighlight
-          style={styles.loginContainer}
-          onPress={this.navigateToNotebookHome}
-        >
-          <Text style={styles.loginText}>Login</Text>
-        </TouchableHighlight>
       </View>
     );
   }
@@ -89,4 +68,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default GitCredentialsScreen;
+export default SearchGistsScreen;
