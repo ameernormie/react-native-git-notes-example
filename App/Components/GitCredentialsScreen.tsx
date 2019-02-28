@@ -5,12 +5,11 @@ import {
   TextInput,
   TouchableHighlight,
   View,
-  TextInputChangeEventData,
 } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
+import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
 interface GitCredentialProps {
-  navigation: NavigationScreenProps;
+  navigation: NavigationScreenProp<NavigationState>;
 }
 
 interface GitCredentialState {

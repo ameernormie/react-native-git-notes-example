@@ -7,8 +7,12 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import { NavigationScreenProp, NavigationState } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-interface NotebookScreenProps {}
+interface NotebookScreenProps {
+  navigation: NavigationScreenProp<NavigationState>;
+}
 
 interface NotebookScreenState {
   newNotebookName: string;
@@ -28,7 +32,18 @@ class NotebookScreen extends React.Component<
   render() {
     return (
       <View style={styles.notebookContainer}>
-        <TextInput placeholder='Gist Search' />
+        <View style={styles.searchNotebookContainer}>
+          <TextInput
+            style={styles.searchNotebookInput}
+            placeholder='Gist Search'
+          />
+          <Icon
+            style={styles.searchIcon}
+            size={16}
+            name='search'
+            color='black'
+          />
+        </View>
         <View style={styles.addNotebookContainer}>
           <TextInput
             style={styles.newNotebook}
@@ -67,6 +82,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#eee',
     alignItems: 'center',
+  },
+  searchNotebookContainer: {
+    backgroundColor: 'grey',
+    height: 35,
+    width: 200,
+    margin: 10,
+    borderRadius: 10,
+    textAlign: 'center',
+    fontSize: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  searchNotebookInput: {
+    margin: 10,
+  },
+  searchIcon: {
+    alignSelf: 'center',
+    marginRight: 10,
   },
   addNotebookContainer: {
     height: 60,

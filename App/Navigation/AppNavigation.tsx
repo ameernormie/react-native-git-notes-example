@@ -5,20 +5,16 @@ import NotebookDetail from '../Components/NotebookDetail';
 import NotebookScreen from '../Components/NotebookScreen';
 import SearchGistsScreen from '../Components/SearchGistsScreen';
 
-const LoginStack = createStackNavigator({
-  LoginScreen: GitCredentialsScreen,
-  NotebookHome: NotebookScreen,
-  NotebookDetail,
-});
+// const LoginStack = createStackNavigator({});
 
-const GistStack = createStackNavigator({
-  SearchGists: SearchGistsScreen,
-});
+// const GistStack = createStackNavigator({});
 
 const AppNavigator = createStackNavigator({
   LandingScreen,
-  MainNav: LoginStack,
-  GistsNav: GistStack,
+  LoginScreen: GitCredentialsScreen,
+  NotebookHome: NotebookScreen,
+  NotebookDetail,
+  SearchGists: SearchGistsScreen,
 });
 
 const AppContainer = createAppContainer(AppNavigator);

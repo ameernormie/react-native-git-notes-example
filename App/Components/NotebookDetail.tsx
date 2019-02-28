@@ -6,8 +6,11 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
+import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
-interface NotebookDetailProps {}
+interface NotebookDetailProps {
+  navigation: NavigationScreenProp<NavigationState>;
+}
 
 interface NotebookDetailState {}
 

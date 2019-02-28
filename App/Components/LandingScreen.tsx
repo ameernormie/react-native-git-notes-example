@@ -1,9 +1,10 @@
 import React from 'react';
 import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
-import { NavigationScreenProps, NavigationActions } from 'react-navigation';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
 interface LandingScreenProps {
-  navigation: NavigationScreenProps;
+  navigation: NavigationScreenProp<NavigationState>;
 }
 
 class LandingScreen extends React.Component<LandingScreenProps, {}> {
@@ -20,7 +21,9 @@ class LandingScreen extends React.Component<LandingScreenProps, {}> {
           style={styles.landingButtons}
           onPress={this.navigateToLogin}
         >
-          <Text style={styles.buttonText}>Login with Git</Text>
+          <Text style={styles.buttonText}>
+            Login with Git <Icon name='github' size={30} color='black' />
+          </Text>
         </TouchableHighlight>
         <TouchableHighlight
           style={styles.landingButtons}
