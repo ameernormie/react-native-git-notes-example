@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 import {
   SectionList,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
-  View
-} from "react-native";
+  View,
+} from 'react-native';
 
 interface NotebookScreenProps {}
 
@@ -19,7 +19,7 @@ class NotebookScreen extends React.Component<
   NotebookScreenState
 > {
   state = {
-    newNotebookName: ""
+    newNotebookName: '',
   };
   onNewNotebookChange = ({ nativeEvent: { text } }) => {
     this.setState(() => ({ newNotebookName: text }));
@@ -28,11 +28,11 @@ class NotebookScreen extends React.Component<
   render() {
     return (
       <View style={styles.notebookContainer}>
-        <TextInput placeholder="Gist Search" />
+        <TextInput placeholder='Gist Search' />
         <View style={styles.addNotebookContainer}>
           <TextInput
             style={styles.newNotebook}
-            placeholder="New Notebook"
+            placeholder='New Notebook'
             onChange={this.onNewNotebookChange}
           />
           <TouchableHighlight
@@ -47,12 +47,12 @@ class NotebookScreen extends React.Component<
             <Text key={index}>{item}</Text>
           )}
           renderSectionHeader={({ section: { title } }) => (
-            <Text style={{ fontWeight: "bold" }}>{title}</Text>
+            <Text style={{ fontWeight: 'bold' }}>{title}</Text>
           )}
           sections={[
-            { title: "Title1", data: ["item1", "item2"] },
-            { title: "Title2", data: ["item3", "item4"] },
-            { title: "Title3", data: ["item5", "item6"] }
+            { title: 'Title1', data: ['item1', 'item2'] },
+            { title: 'Title2', data: ['item3', 'item4'] },
+            { title: 'Title3', data: ['item5', 'item6'] },
           ]}
           keyExtractor={(item, index) => item + index}
         />
@@ -65,30 +65,30 @@ class NotebookScreen extends React.Component<
 const styles = StyleSheet.create({
   notebookContainer: {
     flex: 1,
-    backgroundColor: "#eee",
-    alignItems: "center"
+    backgroundColor: '#eee',
+    alignItems: 'center',
   },
   addNotebookContainer: {
     height: 60,
     width: 200,
-    backgroundColor: "transparent"
+    backgroundColor: 'transparent',
   },
   newNotebook: {
     height: 35,
     width: 200,
-    backgroundColor: "grey"
+    backgroundColor: 'grey',
   },
   saveButton: {
     height: 20,
     width: 70,
-    backgroundColor: "grey",
-    alignSelf: "flex-end",
-    borderRadius: 5
+    backgroundColor: 'grey',
+    alignSelf: 'flex-end',
+    borderRadius: 5,
   },
   saveButtonText: {
     fontSize: 15,
-    textAlign: "center"
-  }
+    textAlign: 'center',
+  },
 });
 
 export default NotebookScreen;

@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
-  View
-} from "react-native";
+  View,
+} from 'react-native';
 
 interface NotebookDetailProps {}
 
@@ -19,7 +19,7 @@ class NotebookDetail extends React.Component<
     return (
       <View style={styles.notebookContainer}>
         <Text>Title of Notebook</Text>
-        <TextInput placeholder="Text field to save new notes" />
+        <TextInput placeholder='Text field to save new notes' />
         <TouchableHighlight>
           <Text>Save</Text>
         </TouchableHighlight>
@@ -33,8 +33,8 @@ class NotebookDetail extends React.Component<
 const styles = StyleSheet.create({
   notebookContainer: {
     flex: 1,
-    backgroundColor: "#eee"
-  }
+    backgroundColor: '#eee',
+  },
 });
 
 export default NotebookDetail;

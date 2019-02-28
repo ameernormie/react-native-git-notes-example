@@ -1,13 +1,13 @@
-import React from "react";
+import React from 'react';
 import {
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   View,
-  TextInputChangeEventData
-} from "react-native";
-import { NavigationScreenProps } from "react-navigation";
+  TextInputChangeEventData,
+} from 'react-native';
+import { NavigationScreenProps } from 'react-navigation';
 
 interface GitCredentialProps {
   navigation: NavigationScreenProps;
@@ -23,8 +23,8 @@ class GitCredentialsScreen extends React.Component<
   GitCredentialState
 > {
   state = {
-    username: "",
-    password: ""
+    username: '',
+    password: '',
   };
   onUsernameChange = ({ nativeEvent: { text } }): void => {
     this.setState(() => ({ username: text }));
@@ -33,7 +33,7 @@ class GitCredentialsScreen extends React.Component<
     this.setState(() => ({ password: text }));
   };
   navigateToNotebookHome = e => {
-    this.props.navigation.navigate("NotebookHome");
+    this.props.navigation.navigate('NotebookHome');
   };
   render() {
     return (
@@ -41,12 +41,12 @@ class GitCredentialsScreen extends React.Component<
         <TextInput
           style={styles.credentialFields}
           onChange={this.onUsernameChange}
-          placeholder="Username"
+          placeholder='Username'
         />
         <TextInput
           style={styles.credentialFields}
           onChange={this.onPasswordChange}
-          placeholder="Password"
+          placeholder='Password'
         />
         <TouchableHighlight
           style={styles.loginContainer}
@@ -62,31 +62,31 @@ class GitCredentialsScreen extends React.Component<
 const styles = StyleSheet.create({
   landingContainer: {
     flex: 1,
-    backgroundColor: "#eee",
+    backgroundColor: '#eee',
     paddingHorizontal: 20,
-    justifyContent: "center",
-    alignItems: "center"
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   credentialFields: {
-    backgroundColor: "grey",
+    backgroundColor: 'grey',
     height: 35,
     width: 200,
     margin: 10,
     borderRadius: 10,
-    textAlign: "center",
-    fontSize: 15
+    textAlign: 'center',
+    fontSize: 15,
   },
   loginContainer: {
-    backgroundColor: "grey",
+    backgroundColor: 'grey',
     height: 35,
     width: 200,
     margin: 10,
-    borderRadius: 10
+    borderRadius: 10,
   },
   loginText: {
-    textAlign: "center",
-    fontSize: 15
-  }
+    textAlign: 'center',
+    fontSize: 15,
+  },
 });
 
 export default GitCredentialsScreen;
