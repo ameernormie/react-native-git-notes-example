@@ -5,10 +5,6 @@ import NotebookDetail from '../Components/NotebookDetail';
 import NotebookScreen from '../Components/NotebookScreen';
 import SearchGistsScreen from '../Components/SearchGistsScreen';
 
-// const LoginStack = createStackNavigator({});
-
-// const GistStack = createStackNavigator({});
-
 const AppNavigator = createStackNavigator({
   LandingScreen,
   LoginScreen: GitCredentialsScreen,

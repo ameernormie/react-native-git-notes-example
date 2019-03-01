@@ -1,14 +1,27 @@
 import React from 'react';
-import { StyleSheet, TextInput, View } from 'react-native';
-import { NavigationScreenProps } from 'react-navigation';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { NavigationScreenProp, NavigationState } from 'react-navigation';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { searchGist } from './../Redux/Gists/operations';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface SearchGistsProps {
-  navigation: NavigationScreenProps;
+  navigation: NavigationScreenProp<NavigationState>;
+  searchGist: (id: string) => void;
+  gist: {};
+  fetching: boolean;
 }
 
 interface SearchGistsState {
-  username: string;
-  password: string;
+  gistId: string;
 }
 
 class SearchGistsScreen extends React.Component<
@@ -16,16 +29,64 @@ class SearchGistsScreen extends React.Component<
   SearchGistsState
 > {
   state = {
-    username: '',
-    password: '',
+    gistId: '',
   };
+
+  onGistTextInputChange = ({ nativeEvent: { text } }) => {
+    this.setState(() => ({ gistId: text }));
+  };
+
+  onSearchGist = () => {
+    const { gistId } = this.state;
+    const { searchGist } = this.props;
+    searchGist(gistId);
+  };
+
   render() {
+    const { fetching, gist } = this.props;
+    let item = {};
+    console.log('fetching and gist ', fetching, gist);
+    if (Boolean(Object.keys(gist).length)) {
+      const { files } = gist;
+      const key = Object.keys(files)[0];
+      item = files[key];
+      console.log('item ', files[item]);
+    }
     return (
       <View style={styles.landingContainer}>
-        <TextInput
-          style={styles.credentialFields}
-          placeholder='Search By Gist ID'
-        />
+        {fetching && (
+          <View style={styles.activityContainer}>
+            <ActivityIndicator size='large' color='black' />
+          </View>
+        )}
+        <View style={styles.searchGistContiner}>
+          <TextInput
+            style={styles.searchGistInput}
+            onChange={this.onGistTextInputChange}
+            placeholder='Search By Gist ID'
+            autoFocus
+          />
+          <TouchableOpacity
+            style={styles.searchIcon}
+            onPress={this.onSearchGist}
+          >
+            <Icon name='search' size={16} />
+          </TouchableOpacity>
+        </View>
+        {Boolean(Object.keys(gist).length) && (
+          <View
+            style={{
+              width: 250,
+              height: 350,
+              backgroundColor: 'grey',
+              justifyContent: 'center',
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{ alignSelf: 'center' }}>{item.filename}</Text>
+            <Text style={{}}>{item.content}</Text>
+          </View>
+        )}
       </View>
     );
   }
@@ -48,17 +109,40 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 15,
   },
-  loginContainer: {
+  searchGistContiner: {
     backgroundColor: 'grey',
     height: 35,
-    width: 200,
+    width: 250,
     margin: 10,
     borderRadius: 10,
-  },
-  loginText: {
     textAlign: 'center',
     fontSize: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  searchGistInput: {
+    margin: 10,
+  },
+  searchIcon: {
+    alignSelf: 'center',
+    marginRight: 10,
+  },
+  activityContainer: {
+    flex: 1,
+    justifyContent: 'center',
   },
 });
 
-export default SearchGistsScreen;
+const mapStateToProps = ({ gist: { fetching, gist } }) => ({
+  gist,
+  fetching,
+});
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators({ searchGist }, dispatch);
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(SearchGistsScreen);

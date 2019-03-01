@@ -1,14 +1,24 @@
 import React from 'react';
 import {
-  SectionList,
+  FlatList,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
   View,
 } from 'react-native';
-import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { NavigationScreenProp, NavigationState } from 'react-navigation';
+import NotebookRow from '../Common/NotebookRow';
+
+const items = [
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+];
 
 interface NotebookScreenProps {
   navigation: NavigationScreenProp<NavigationState>;
@@ -29,6 +39,13 @@ class NotebookScreen extends React.Component<
     this.setState(() => ({ newNotebookName: text }));
   };
   onSaveNotebook = e => {};
+
+  renderNotebook = item => {
+    const task = item.item;
+    console.log(task);
+    return <NotebookRow />;
+  };
+
   render() {
     return (
       <View style={styles.notebookContainer}>
@@ -57,21 +74,9 @@ class NotebookScreen extends React.Component<
             <Text style={styles.saveButtonText}>Save </Text>
           </TouchableHighlight>
         </View>
-        <SectionList
-          renderItem={({ item, index, section }) => (
-            <Text key={index}>{item}</Text>
-          )}
-          renderSectionHeader={({ section: { title } }) => (
-            <Text style={{ fontWeight: 'bold' }}>{title}</Text>
-          )}
-          sections={[
-            { title: 'Title1', data: ['item1', 'item2'] },
-            { title: 'Title2', data: ['item3', 'item4'] },
-            { title: 'Title3', data: ['item5', 'item6'] },
-          ]}
-          keyExtractor={(item, index) => item + index}
-        />
-        <Text>Here comes the list</Text>
+        <View style={{ flex: 1 }}>
+          <FlatList data={items} renderItem={this.renderNotebook} />
+        </View>
       </View>
     );
   }

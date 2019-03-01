@@ -25,15 +25,19 @@ class GitCredentialsScreen extends React.Component<
     username: '',
     password: '',
   };
+
   onUsernameChange = ({ nativeEvent: { text } }): void => {
     this.setState(() => ({ username: text }));
   };
+
   onPasswordChange = ({ nativeEvent: { text } }): void => {
     this.setState(() => ({ password: text }));
   };
-  navigateToNotebookHome = e => {
+
+  navigateToNotebookHome = () => {
     this.props.navigation.navigate('NotebookHome');
   };
+
   render() {
     return (
       <View style={styles.landingContainer}>

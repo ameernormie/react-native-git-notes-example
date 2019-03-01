@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 
@@ -7,30 +7,35 @@ interface LandingScreenProps {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-class LandingScreen extends React.Component<LandingScreenProps, {}> {
-  navigateToLogin = e => {
+interface LandingScreenState {}
+
+class LandingScreen extends React.Component<
+  LandingScreenProps,
+  LandingScreenState
+> {
+  navigateToLogin = () => {
     this.props.navigation.navigate('LoginScreen');
   };
-  navigateToSearchPage = e => {
+  navigateToSearchPage = () => {
     this.props.navigation.navigate('SearchGists');
   };
   render() {
     return (
       <View style={styles.landingContainer}>
-        <TouchableHighlight
+        <TouchableOpacity
           style={styles.landingButtons}
           onPress={this.navigateToLogin}
         >
           <Text style={styles.buttonText}>
             Login with Git <Icon name='github' size={30} color='black' />
           </Text>
-        </TouchableHighlight>
-        <TouchableHighlight
+        </TouchableOpacity>
+        <TouchableOpacity
           style={styles.landingButtons}
           onPress={this.navigateToSearchPage}
         >
-          <Text style={styles.buttonText}> Search Gists</Text>
-        </TouchableHighlight>
+          <Text style={styles.buttonText}>Search Gists</Text>
+        </TouchableOpacity>
       </View>
     );
   }
