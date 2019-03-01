@@ -19,6 +19,7 @@
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "reduxsauce": "^1.0.1",
     "seamless-immutable": "^7.1.4"
   },
   "devDependencies": {

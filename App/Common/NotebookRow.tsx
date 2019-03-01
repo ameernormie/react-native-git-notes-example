@@ -1,22 +1,40 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-class NotebookRow extends React.Component {
+const SCREEN_WIDTH = Dimensions.get('screen').width;
+
+interface NotebookRowProps {
+  item: {
+    title: string;
+  };
+}
+
+interface NotebookRowState {}
+
+class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
   render() {
+    const { item } = this.props;
     return (
       <View style={styles.rowContainer}>
         <View
           style={{
-            flex: 1,
-            backgroundColor: 'white',
+            flex: 5,
+            backgroundColor: 'transparent',
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
             paddingVertical: 10,
+            paddingLeft: 20,
           }}
         >
-          <Text style={styles.rowTitle}>Notebook Title</Text>
+          <Text style={styles.rowTitle}>{item.title}</Text>
         </View>
         <TouchableOpacity
           style={{
@@ -46,14 +64,15 @@ class NotebookRow extends React.Component {
 const styles = StyleSheet.create({
   rowContainer: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'white',
     paddingHorizontal: 0,
-    width: 250,
+    width: SCREEN_WIDTH,
+    flexDirection: 'row',
   },
   rowTitle: {
     marginHorizontal: 5,
     fontSize: 15,
-    color: '#eee',
+    color: 'black',
   },
 });
 

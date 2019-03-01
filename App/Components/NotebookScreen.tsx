@@ -18,6 +18,13 @@ const items = [
   { title: 'title' },
   { title: 'title' },
   { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
+  { title: 'title' },
 ];
 
 interface NotebookScreenProps {
@@ -42,8 +49,7 @@ class NotebookScreen extends React.Component<
 
   renderNotebook = item => {
     const task = item.item;
-    console.log(task);
-    return <NotebookRow />;
+    return <NotebookRow item={task} />;
   };
 
   render() {
