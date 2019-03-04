@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { searchGist } from './../Redux/Gists/operations';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 interface SearchGistsProps {
   navigation: NavigationScreenProp<NavigationState>;
@@ -45,20 +45,20 @@ class SearchGistsScreen extends React.Component<
   render() {
     const { fetching, gist } = this.props;
     let item = {};
-    console.log('fetching and gist ', fetching, gist);
     if (Boolean(Object.keys(gist).length)) {
       const { files } = gist;
       const key = Object.keys(files)[0];
       item = files[key];
-      console.log('item ', files[item]);
+    }
+    if (fetching) {
+      return (
+        <View style={styles.activityContainer}>
+          <ActivityIndicator size='large' color='black' />
+        </View>
+      );
     }
     return (
       <View style={styles.landingContainer}>
-        {fetching && (
-          <View style={styles.activityContainer}>
-            <ActivityIndicator size='large' color='black' />
-          </View>
-        )}
         <View style={styles.searchGistContiner}>
           <TextInput
             style={styles.searchGistInput}

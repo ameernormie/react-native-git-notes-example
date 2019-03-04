@@ -49,6 +49,7 @@ class GitCredentialsScreen extends React.Component<
         <TextInput
           style={styles.credentialFields}
           onChange={this.onPasswordChange}
+          secureTextEntry={true}
           placeholder='Password'
         />
         <TouchableHighlight

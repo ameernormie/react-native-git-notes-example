@@ -1,5 +1,8 @@
 import React from 'react';
 import {
+  Alert,
+  AsyncStorage,
+  Dimensions,
   FlatList,
   StyleSheet,
   Text,
@@ -10,6 +13,8 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import NotebookRow from '../Common/NotebookRow';
+
+const SCREEN_WIDTH = Dimensions.get('screen').width;
 
 const items = [
   { title: 'title' },
@@ -33,19 +38,49 @@ interface NotebookScreenProps {
 
 interface NotebookScreenState {
   newNotebookName: string;
+  notebooks: [];
 }
 
 class NotebookScreen extends React.Component<
   NotebookScreenProps,
   NotebookScreenState
 > {
-  state = {
-    newNotebookName: '',
-  };
+  constructor(props: NotebookScreenProps) {
+    super(props);
+    this.inputRef = React.createRef();
+    this.state = {
+      newNotebookName: '',
+      notebooks: [],
+    };
+  }
+
+  async componentDidMount() {
+    try {
+      const noteBookList = await AsyncStorage.getItem('notebook');
+      console.log('storage ', noteBookList);
+    } catch (error) {
+      throw new Error('Unable to get Notebooks');
+    }
+  }
+
   onNewNotebookChange = ({ nativeEvent: { text } }) => {
     this.setState(() => ({ newNotebookName: text }));
   };
-  onSaveNotebook = e => {};
+
+  onSaveNotebook = async () => {
+    const { newNotebookName } = this.state;
+    if (!newNotebookName) {
+      Alert.alert('Blank Notebook ', 'Cannot Save Empty notebook ');
+      return;
+    }
+    try {
+      this.textInput.clear();
+      await AsyncStorage.setItem('notebook', newNotebookName);
+      Alert.alert('Success ', 'Notebook Saved');
+    } catch (error) {
+      throw new Error('Unable to store data to async storage');
+    }
+  };
 
   renderNotebook = item => {
     const task = item.item;
@@ -53,12 +88,16 @@ class NotebookScreen extends React.Component<
   };
 
   render() {
+    console.log('props ', this.props);
     return (
       <View style={styles.notebookContainer}>
         <View style={styles.searchNotebookContainer}>
           <TextInput
             style={styles.searchNotebookInput}
             placeholder='Gist Search'
+            ref={input => {
+              this.textInput = input;
+            }}
           />
           <Icon
             style={styles.searchIcon}
@@ -95,7 +134,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   searchNotebookContainer: {
-    backgroundColor: 'grey',
+    backgroundColor: '#eee',
     height: 35,
     width: 200,
     margin: 10,
@@ -114,18 +153,19 @@ const styles = StyleSheet.create({
   },
   addNotebookContainer: {
     height: 60,
-    width: 200,
+    paddingHorizontal: 10,
+    width: SCREEN_WIDTH,
     backgroundColor: 'transparent',
   },
   newNotebook: {
     height: 35,
     width: 200,
-    backgroundColor: 'grey',
+    backgroundColor: '#eee',
   },
   saveButton: {
     height: 20,
     width: 70,
-    backgroundColor: 'grey',
+    backgroundColor: '#def',
     alignSelf: 'flex-end',
     borderRadius: 5,
   },
