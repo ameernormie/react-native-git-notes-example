@@ -16,6 +16,7 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import NotebookRow from '../Common/NotebookRow';
+import { Notebook } from './../Models';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 
@@ -25,10 +26,7 @@ interface NotebookScreenProps {
 
 interface NotebookScreenState {
   newNotebookName: string;
-  notebooks: {
-    title: string;
-    notes: {}[];
-  }[];
+  notebooks: Notebook[];
 }
 
 class NotebookScreen extends React.Component<
@@ -46,9 +44,8 @@ class NotebookScreen extends React.Component<
   async componentDidMount() {
     try {
       const notebooks: any = await AsyncStorage.getItem('Notebooks');
-      console.log('notebooks ', notebooks);
       if (!JSON.parse(notebooks)) {
-        const notebookArray: [] = [];
+        const notebookArray: Notebook[] = [];
         await AsyncStorage.setItem('Notebooks', JSON.stringify(notebookArray));
       } else {
         this.setState(() => ({ notebooks: JSON.parse(notebooks) }));
@@ -108,7 +105,7 @@ class NotebookScreen extends React.Component<
   };
 
   onNotebookPress = (e: GestureResponderEvent, index: number) => {
-    console.log('navigate ', index);
+    this.props.navigation.navigate('NotesScreen', { itemIndex: index });
   };
 
   renderNotebook = (item: any, index: any) => {
@@ -122,6 +119,8 @@ class NotebookScreen extends React.Component<
       />
     );
   };
+
+  keyExtractor = (item: Notebook, index: number) => String(index);
 
   render() {
     const { notebooks } = this.state;
@@ -157,6 +156,7 @@ class NotebookScreen extends React.Component<
             <FlatList
               data={notebooks}
               renderItem={({ item, index }) => this.renderNotebook(item, index)}
+              keyExtractor={this.keyExtractor}
             />
           </View>
         )}

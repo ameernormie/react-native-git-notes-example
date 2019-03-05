@@ -23,7 +23,7 @@ interface NotebookRowProps {
   index: number;
   onDelete: (e: GestureResponderEvent, index: number) => void;
   onEdit: (index: number, title: string) => void;
-  onRowPress: (e: GestureResponderEvent, index: number) => void;
+  onRowPress?: (e: GestureResponderEvent, index: number) => void;
 }
 
 interface NotebookRowState {
@@ -35,6 +35,10 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
   state = {
     modalVisible: false,
     newTitle: '',
+  };
+
+  static defaultProps = {
+    onRowPress: (e: GestureResponderEvent, index: number) => {},
   };
 
   setModalVisibility = () => {

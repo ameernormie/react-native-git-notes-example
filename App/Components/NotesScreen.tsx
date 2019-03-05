@@ -13,9 +13,9 @@ import {
   TouchableHighlight,
   View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { NavigationScreenProp, NavigationState } from 'react-navigation';
 import NotebookRow from '../Common/NotebookRow';
+import { Note, Notebook } from './../Models';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 
@@ -24,54 +24,59 @@ interface NotesScreenProps {
 }
 
 interface NotesScreenState {
-  newNotebookName: string;
-  notes: {
-    title: string;
-  }[];
+  newNote: string;
+  notes: Note[];
+  notebooks: Notebook[];
+  itemIndex: number;
 }
 
 class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
   constructor(props: NotesScreenProps) {
     super(props);
     this.state = {
-      newNotebookName: '',
+      newNote: '',
       notes: [],
+      itemIndex: 0,
+      notebooks: [],
     };
   }
 
   async componentDidMount() {
+    const itemIndex = this.props.navigation.getParam('itemIndex');
     try {
       const notebooks: any = await AsyncStorage.getItem('Notebooks');
-      console.log('notebooks ', notebooks);
-      if (!JSON.parse(notebooks)) {
-        const notebookArray: [] = [];
-        await AsyncStorage.setItem('Notebooks', JSON.stringify(notebookArray));
-      } else {
-        this.setState(() => ({ notes: JSON.parse(notebooks) }));
-      }
+      const notebook = JSON.parse(notebooks)[itemIndex];
+      this.setState(() => ({
+        notes: notebook.notes,
+        itemIndex,
+        notebooks: JSON.parse(notebooks),
+      }));
     } catch (error) {
       throw new Error('Unable to get Notebooks');
     }
   }
 
-  onNewNotebookChange = ({
+  onNewNoteChange = ({
     nativeEvent: { text },
   }: NativeSyntheticEvent<TextInputChangeEventData>): void => {
-    this.setState(() => ({ newNotebookName: text }));
+    this.setState(() => ({ newNote: text }));
   };
 
-  onSaveNotebook = async () => {
-    const { newNotebookName } = this.state;
-    const notebooks: any = await AsyncStorage.getItem('Notebooks');
-    if (!newNotebookName) {
+  onSaveNote = async () => {
+    const { newNote, itemIndex } = this.state;
+    if (!newNote) {
       Alert.alert('Blank Notebook ', 'Cannot Save Empty notebook ');
       return;
     }
     try {
+      const notebooks: any = await AsyncStorage.getItem('Notebooks');
       const notebooksArray = JSON.parse(notebooks);
-      notebooksArray.push({ title: newNotebookName, notes: [] });
+      notebooksArray[itemIndex].notes = [
+        ...notebooksArray[itemIndex].notes,
+        { title: newNote },
+      ];
       this.setState(({ notes }) => ({
-        notebooks: [...notes, { title: newNotebookName }],
+        notes: [...notes, { title: newNote }],
       }));
       await AsyncStorage.setItem('Notebooks', JSON.stringify(notebooksArray));
       Alert.alert('Success ', 'Notebook Saved');
@@ -80,11 +85,13 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
     }
   };
 
-  onDeleteNotebook = async (e: GestureResponderEvent, index: number) => {
-    const { notes } = this.state;
-    const updatedNotebooks = notes;
-    updatedNotebooks.splice(index, 1);
-    this.setState(() => ({ notes: updatedNotebooks }));
+  onDeleteNote = async (e: GestureResponderEvent, index: number) => {
+    const { notes, notebooks, itemIndex } = this.state;
+    const updatedNotes = notes;
+    updatedNotes.splice(index, 1);
+    const updatedNotebooks = notebooks;
+    updatedNotebooks[itemIndex].notes = updatedNotes;
+    this.setState(() => ({ notes: updatedNotes, notebooks: updatedNotebooks }));
     try {
       await AsyncStorage.setItem('Notebooks', JSON.stringify(updatedNotebooks));
     } catch (error) {
@@ -93,9 +100,13 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
   };
 
   onEditNotebookTitle = async (index: number, title: string) => {
-    const { notes } = this.state;
-    const updatedNotebooks = notes;
-    updatedNotebooks[index].title = title;
+    console.log('index and title ', index, title);
+    const { notes, notebooks, itemIndex } = this.state;
+    const updatedNotes = notes;
+    updatedNotes[index].title = title;
+    const updatedNotebooks = notebooks;
+    updatedNotebooks[itemIndex].notes = updatedNotes;
+    this.setState(() => ({ notes: updatedNotes, notebooks: updatedNotebooks }));
     try {
       await AsyncStorage.setItem('Notebooks', JSON.stringify(updatedNotebooks));
     } catch (error) {
@@ -108,9 +119,8 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
       <NotebookRow
         item={item}
         index={index}
-        onDelete={this.onDeleteNotebook}
+        onDelete={this.onDeleteNote}
         onEdit={this.onEditNotebookTitle}
-        onRowPress={() => console.log('pressed')}
       />
     );
   };
@@ -119,27 +129,15 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
     const { notes } = this.state;
     return (
       <View style={styles.notebookContainer}>
-        <View style={styles.searchNotebookContainer}>
-          <TextInput
-            style={styles.searchNotebookInput}
-            placeholder='Gist Search'
-          />
-          <Icon
-            style={styles.searchIcon}
-            size={16}
-            name='search'
-            color='black'
-          />
-        </View>
         <View style={styles.addNotebookContainer}>
           <TextInput
             style={styles.newNotebook}
-            placeholder='New Notebook'
-            onChange={this.onNewNotebookChange}
+            placeholder='New Note'
+            onChange={this.onNewNoteChange}
           />
           <TouchableHighlight
             style={styles.saveButton}
-            onPress={this.onSaveNotebook}
+            onPress={this.onSaveNote}
           >
             <Text style={styles.saveButtonText}>Save </Text>
           </TouchableHighlight>

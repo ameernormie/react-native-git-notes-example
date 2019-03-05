@@ -1,8 +1,10 @@
 import React from 'react';
 import {
+  NativeSyntheticEvent,
   StyleSheet,
   Text,
   TextInput,
+  TextInputChangeEventData,
   TouchableHighlight,
   View,
 } from 'react-native';
@@ -26,11 +28,15 @@ class GitCredentialsScreen extends React.Component<
     password: '',
   };
 
-  onUsernameChange = ({ nativeEvent: { text } }): void => {
+  onUsernameChange = ({
+    nativeEvent: { text },
+  }: NativeSyntheticEvent<TextInputChangeEventData>): void => {
     this.setState(() => ({ username: text }));
   };
 
-  onPasswordChange = ({ nativeEvent: { text } }): void => {
+  onPasswordChange = ({
+    nativeEvent: { text },
+  }: NativeSyntheticEvent<TextInputChangeEventData>): void => {
     this.setState(() => ({ password: text }));
   };
 

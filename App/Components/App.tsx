@@ -8,7 +8,6 @@ export interface AppState {}
 
 export default class App extends Component<AppProps, AppState> {
   render() {
-    console.log('store ', store.getState());
     return (
       <Provider store={store}>
         <AppContainer />

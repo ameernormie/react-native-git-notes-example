@@ -1,26 +1,15 @@
-export interface ConnectionInfo {
-  type: string;
-  effectiveType: string;
-}
-
 export interface Note {
-  id: string;
   title: string;
-  content: string;
 }
 
 export interface Notebook {
-  id: string;
   title: string;
   notes: Note[];
 }
 
-export interface Notes {
-  notesList: Note[];
-}
-
-export interface Notebooks {
-  notebookList: Notebook[];
+export interface ConnectionInfo {
+  type: string;
+  effectiveType: string;
 }
 
 export interface AddNoteToNotebook {
