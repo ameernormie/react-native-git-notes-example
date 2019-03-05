@@ -92,10 +92,11 @@ const styles = StyleSheet.create({
     width: 200,
     margin: 10,
     borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   loginText: {
-    textAlign: 'center',
-    fontSize: 15,
+    fontSize: 18,
   },
 });
 

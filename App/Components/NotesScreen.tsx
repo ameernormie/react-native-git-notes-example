@@ -77,6 +77,7 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
       ];
       this.setState(({ notes }) => ({
         notes: [...notes, { title: newNote }],
+        newNote: '',
       }));
       await AsyncStorage.setItem('Notebooks', JSON.stringify(notebooksArray));
       Alert.alert('Success ', 'Notebook Saved');
@@ -100,7 +101,6 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
   };
 
   onEditNotebookTitle = async (index: number, title: string) => {
-    console.log('index and title ', index, title);
     const { notes, notebooks, itemIndex } = this.state;
     const updatedNotes = notes;
     updatedNotes[index].title = title;
@@ -126,13 +126,14 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
   };
 
   render() {
-    const { notes } = this.state;
+    const { notes, newNote } = this.state;
     return (
       <View style={styles.notebookContainer}>
         <View style={styles.addNotebookContainer}>
           <TextInput
             style={styles.newNotebook}
             placeholder='New Note'
+            value={newNote}
             onChange={this.onNewNoteChange}
           />
           <TouchableHighlight
@@ -145,6 +146,7 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
         {Boolean(notes.length) && (
           <View style={{ flex: 1 }}>
             <FlatList
+              keyboardShouldPersistTaps={'always'}
               data={notes}
               renderItem={({ item, index }) => this.renderNotebook(item, index)}
             />

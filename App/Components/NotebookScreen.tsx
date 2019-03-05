@@ -73,6 +73,7 @@ class NotebookScreen extends React.Component<
       notebooksArray.push({ title: newNotebookName, notes: [] });
       this.setState(({ notebooks }) => ({
         notebooks: [...notebooks, { title: newNotebookName, notes: [] }],
+        newNotebookName: '',
       }));
       await AsyncStorage.setItem('Notebooks', JSON.stringify(notebooksArray));
       Alert.alert('Success ', 'Notebook Saved');
@@ -123,7 +124,7 @@ class NotebookScreen extends React.Component<
   keyExtractor = (item: Notebook, index: number) => String(index);
 
   render() {
-    const { notebooks } = this.state;
+    const { notebooks, newNotebookName } = this.state;
     return (
       <View style={styles.notebookContainer}>
         <View style={styles.searchNotebookContainer}>
@@ -142,6 +143,7 @@ class NotebookScreen extends React.Component<
           <TextInput
             style={styles.newNotebook}
             placeholder='New Notebook'
+            value={newNotebookName}
             onChange={this.onNewNotebookChange}
           />
           <TouchableHighlight

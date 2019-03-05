@@ -56,7 +56,7 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
     const { newTitle } = this.state;
     if (Boolean(newTitle)) {
       this.props.onEdit(this.props.index, newTitle);
-      this.setState({ modalVisible: false });
+      this.setState(() => ({ modalVisible: false, newTitle: '' }));
     } else {
       Alert.alert('Blank Title', 'Title cannot be blank');
     }
@@ -96,16 +96,14 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
               marginTop: 22,
             }}
           >
-            <View>
-              <TextInput
-                placeholder='New Title'
-                onChange={this.onNotebookTitleChange}
-              />
+            <TextInput
+              placeholder='New Title'
+              onChange={this.onNotebookTitleChange}
+            />
 
-              <TouchableOpacity onPress={this.onSaveNewTitle}>
-                <Text>Save</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity onPress={this.onSaveNewTitle}>
+              <Text>Save</Text>
+            </TouchableOpacity>
           </View>
         </Modal>
         <TouchableOpacity
