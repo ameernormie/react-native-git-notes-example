@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
   },
   addNotebookContainer: {
     height: 60,
-    paddingHorizontal: 10,
+    paddingHorizontal: 30,
     width: SCREEN_WIDTH,
     backgroundColor: 'transparent',
   },

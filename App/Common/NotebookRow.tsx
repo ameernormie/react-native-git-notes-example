@@ -24,6 +24,7 @@ interface NotebookRowProps {
   onDelete: (e: GestureResponderEvent, index: number) => void;
   onEdit: (index: number, title: string) => void;
   onRowPress?: (e: GestureResponderEvent, index: number) => void;
+  notesListEnabled?: boolean;
 }
 
 interface NotebookRowState {
@@ -39,6 +40,7 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
 
   static defaultProps = {
     onRowPress: (e: GestureResponderEvent, index: number) => {},
+    notesListEnabled: false,
   };
 
   setModalVisibility = () => {
@@ -63,7 +65,9 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
   };
 
   render() {
-    const { item } = this.props;
+    const { item, notesListEnabled } = this.props;
+
+    // const ListRow = notesListEnabled
     return (
       <TouchableOpacity
         style={styles.rowContainer}

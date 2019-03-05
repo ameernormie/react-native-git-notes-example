@@ -76,11 +76,11 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
         { title: newNote },
       ];
       this.setState(({ notes }) => ({
-        notes: [...notes, { title: newNote }],
+        notes: [...notes, { title: newNote, content: '' }],
         newNote: '',
       }));
       await AsyncStorage.setItem('Notebooks', JSON.stringify(notebooksArray));
-      Alert.alert('Success ', 'Notebook Saved');
+      Alert.alert('Success ', 'Note Saved');
     } catch (error) {
       throw new Error('Unable to store data to async storage');
     }
@@ -114,6 +114,11 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
     }
   };
 
+  onNotePress = async (e: GestureResponderEvent, index: number) => {
+    console.log('pressed ', index);
+    this.props.navigation.navigate('NotesModal');
+  };
+
   renderNotebook = (item: any, index: any) => {
     return (
       <NotebookRow
@@ -121,6 +126,7 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
         index={index}
         onDelete={this.onDeleteNote}
         onEdit={this.onEditNotebookTitle}
+        onRowPress={this.onNotePress}
       />
     );
   };
@@ -183,7 +189,7 @@ const styles = StyleSheet.create({
   },
   addNotebookContainer: {
     height: 60,
-    paddingHorizontal: 10,
+    paddingHorizontal: 30,
     width: SCREEN_WIDTH,
     backgroundColor: 'transparent',
   },

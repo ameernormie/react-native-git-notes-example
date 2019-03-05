@@ -41,6 +41,7 @@ class GitCredentialsScreen extends React.Component<
   };
 
   navigateToNotebookHome = () => {
+    this.setState(() => ({ username: '', password: '' }));
     this.props.navigation.navigate('NotebookHome');
   };
 
