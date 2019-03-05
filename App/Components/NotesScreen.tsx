@@ -19,27 +19,23 @@ import NotebookRow from '../Common/NotebookRow';
 
 const SCREEN_WIDTH = Dimensions.get('screen').width;
 
-interface NotebookScreenProps {
+interface NotesScreenProps {
   navigation: NavigationScreenProp<NavigationState>;
 }
 
-interface NotebookScreenState {
+interface NotesScreenState {
   newNotebookName: string;
-  notebooks: {
+  notes: {
     title: string;
-    notes: {}[];
   }[];
 }
 
-class NotebookScreen extends React.Component<
-  NotebookScreenProps,
-  NotebookScreenState
-> {
-  constructor(props: NotebookScreenProps) {
+class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
+  constructor(props: NotesScreenProps) {
     super(props);
     this.state = {
       newNotebookName: '',
-      notebooks: [],
+      notes: [],
     };
   }
 
@@ -51,7 +47,7 @@ class NotebookScreen extends React.Component<
         const notebookArray: [] = [];
         await AsyncStorage.setItem('Notebooks', JSON.stringify(notebookArray));
       } else {
-        this.setState(() => ({ notebooks: JSON.parse(notebooks) }));
+        this.setState(() => ({ notes: JSON.parse(notebooks) }));
       }
     } catch (error) {
       throw new Error('Unable to get Notebooks');
@@ -74,8 +70,8 @@ class NotebookScreen extends React.Component<
     try {
       const notebooksArray = JSON.parse(notebooks);
       notebooksArray.push({ title: newNotebookName, notes: [] });
-      this.setState(({ notebooks }) => ({
-        notebooks: [...notebooks, { title: newNotebookName, notes: [] }],
+      this.setState(({ notes }) => ({
+        notebooks: [...notes, { title: newNotebookName }],
       }));
       await AsyncStorage.setItem('Notebooks', JSON.stringify(notebooksArray));
       Alert.alert('Success ', 'Notebook Saved');
@@ -85,10 +81,10 @@ class NotebookScreen extends React.Component<
   };
 
   onDeleteNotebook = async (e: GestureResponderEvent, index: number) => {
-    const { notebooks } = this.state;
-    const updatedNotebooks = notebooks;
+    const { notes } = this.state;
+    const updatedNotebooks = notes;
     updatedNotebooks.splice(index, 1);
-    this.setState(() => ({ notebooks: updatedNotebooks }));
+    this.setState(() => ({ notes: updatedNotebooks }));
     try {
       await AsyncStorage.setItem('Notebooks', JSON.stringify(updatedNotebooks));
     } catch (error) {
@@ -97,18 +93,14 @@ class NotebookScreen extends React.Component<
   };
 
   onEditNotebookTitle = async (index: number, title: string) => {
-    const { notebooks } = this.state;
-    const updatedNotebooks = notebooks;
+    const { notes } = this.state;
+    const updatedNotebooks = notes;
     updatedNotebooks[index].title = title;
     try {
       await AsyncStorage.setItem('Notebooks', JSON.stringify(updatedNotebooks));
     } catch (error) {
       Alert.alert('Error', 'Unable to Edit Title');
     }
-  };
-
-  onNotebookPress = (e: GestureResponderEvent, index: number) => {
-    console.log('navigate ', index);
   };
 
   renderNotebook = (item: any, index: any) => {
@@ -118,13 +110,13 @@ class NotebookScreen extends React.Component<
         index={index}
         onDelete={this.onDeleteNotebook}
         onEdit={this.onEditNotebookTitle}
-        onRowPress={this.onNotebookPress}
+        onRowPress={() => console.log('pressed')}
       />
     );
   };
 
   render() {
-    const { notebooks } = this.state;
+    const { notes } = this.state;
     return (
       <View style={styles.notebookContainer}>
         <View style={styles.searchNotebookContainer}>
@@ -152,10 +144,10 @@ class NotebookScreen extends React.Component<
             <Text style={styles.saveButtonText}>Save </Text>
           </TouchableHighlight>
         </View>
-        {Boolean(notebooks.length) && (
+        {Boolean(notes.length) && (
           <View style={{ flex: 1 }}>
             <FlatList
-              data={notebooks}
+              data={notes}
               renderItem={({ item, index }) => this.renderNotebook(item, index)}
             />
           </View>
@@ -213,4 +205,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default NotebookScreen;
+export default NotesScreen;

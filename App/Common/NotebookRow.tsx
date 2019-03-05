@@ -2,13 +2,15 @@ import React from 'react';
 import {
   Alert,
   Dimensions,
+  GestureResponderEvent,
   Modal,
+  NativeSyntheticEvent,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  TextInput,
+  TextInputChangeEventData,
   TouchableOpacity,
   View,
-  TextInput,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -18,23 +20,51 @@ interface NotebookRowProps {
   item: {
     title: string;
   };
+  index: number;
+  onDelete: (e: GestureResponderEvent, index: number) => void;
+  onEdit: (index: number, title: string) => void;
+  onRowPress: (e: GestureResponderEvent, index: number) => void;
 }
 
 interface NotebookRowState {
   modalVisible: boolean;
+  newTitle: string;
 }
 
 class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
   state = {
     modalVisible: false,
+    newTitle: '',
   };
+
   setModalVisibility = () => {
     this.setState(({ modalVisible }) => ({ modalVisible: !modalVisible }));
   };
+
+  onNotebookTitleChange = ({
+    nativeEvent: { text },
+  }: NativeSyntheticEvent<TextInputChangeEventData>): void => {
+    this.setState(() => ({ newTitle: text }));
+  };
+
+  onSaveNewTitle = (e: GestureResponderEvent) => {
+    e.preventDefault();
+    const { newTitle } = this.state;
+    if (Boolean(newTitle)) {
+      this.props.onEdit(this.props.index, newTitle);
+      this.setState({ modalVisible: false });
+    } else {
+      Alert.alert('Blank Title', 'Title cannot be blank');
+    }
+  };
+
   render() {
     const { item } = this.props;
     return (
-      <View style={styles.rowContainer}>
+      <TouchableOpacity
+        style={styles.rowContainer}
+        onPress={e => this.props.onRowPress(e, this.props.index)}
+      >
         <View
           style={{
             flex: 5,
@@ -53,9 +83,6 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
           animationType='slide'
           transparent={false}
           visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert('Modal has been closed.');
-          }}
         >
           <View
             style={{
@@ -66,9 +93,12 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
             }}
           >
             <View>
-              <TextInput placeholder='New Title' />
+              <TextInput
+                placeholder='New Title'
+                onChange={this.onNotebookTitleChange}
+              />
 
-              <TouchableOpacity onPress={this.setModalVisibility}>
+              <TouchableOpacity onPress={this.onSaveNewTitle}>
                 <Text>Save</Text>
               </TouchableOpacity>
             </View>
@@ -81,7 +111,7 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
             justifyContent: 'center',
             alignItems: 'center',
           }}
-          onPress={this.setModalVisibility}
+          onPress={e => this.props.onDelete(e, this.props.index)}
         >
           <Icon name={'trash'} color={'red'} style={{ fontSize: 20 }} />
         </TouchableOpacity>
@@ -96,7 +126,7 @@ class NotebookRow extends React.Component<NotebookRowProps, NotebookRowState> {
         >
           <Icon name={'edit'} color={'blue'} style={{ fontSize: 20 }} />
         </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
     );
   }
 }
