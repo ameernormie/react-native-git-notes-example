@@ -25,7 +25,7 @@ const MainStack = createStackNavigator(
         fontWeight: 'bold',
       },
     },
-  }
+  },
 );
 
 const RootStack = createStackNavigator(
@@ -40,7 +40,7 @@ const RootStack = createStackNavigator(
   {
     mode: 'modal',
     headerMode: 'none',
-  }
+  },
 );
 
 const AppContainer = createAppContainer(RootStack);

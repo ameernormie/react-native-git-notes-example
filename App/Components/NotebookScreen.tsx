@@ -159,6 +159,7 @@ class NotebookScreen extends React.Component<
               data={notebooks}
               renderItem={({ item, index }) => this.renderNotebook(item, index)}
               keyExtractor={this.keyExtractor}
+              keyboardShouldPersistTaps={'always'}
             />
           </View>
         )}

@@ -19,6 +19,7 @@ const SCREEN_WIDTH = Dimensions.get('screen').width;
 interface NotebookRowProps {
   item: {
     title: string;
+    content?: string;
   };
   index: number;
   onDelete: (e: GestureResponderEvent, index: number) => void;

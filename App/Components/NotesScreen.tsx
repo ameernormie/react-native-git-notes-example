@@ -56,6 +56,21 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
     }
   }
 
+  getNotebooksFromAsyncStorage = async () => {
+    const itemIndex = this.props.navigation.getParam('itemIndex');
+    try {
+      const notebooks: any = await AsyncStorage.getItem('Notebooks');
+      const notebook = JSON.parse(notebooks)[itemIndex];
+      this.setState(() => ({
+        notes: notebook.notes,
+        itemIndex,
+        notebooks: JSON.parse(notebooks),
+      }));
+    } catch (error) {
+      throw new Error('Unable to get Notebooks');
+    }
+  };
+
   onNewNoteChange = ({
     nativeEvent: { text },
   }: NativeSyntheticEvent<TextInputChangeEventData>): void => {
@@ -65,7 +80,7 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
   onSaveNote = async () => {
     const { newNote, itemIndex } = this.state;
     if (!newNote) {
-      Alert.alert('Blank Notebook ', 'Cannot Save Empty notebook ');
+      Alert.alert('Blank Note ', 'Cannot Save Empty note ');
       return;
     }
     try {
@@ -73,13 +88,16 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
       const notebooksArray = JSON.parse(notebooks);
       notebooksArray[itemIndex].notes = [
         ...notebooksArray[itemIndex].notes,
-        { title: newNote },
+        { title: newNote, content: '' },
       ];
-      this.setState(({ notes }) => ({
-        notes: [...notes, { title: newNote, content: '' }],
-        newNote: '',
-      }));
       await AsyncStorage.setItem('Notebooks', JSON.stringify(notebooksArray));
+      this.setState(
+        ({ notes }) => ({
+          notes: [...notes, { title: newNote, content: '' }],
+          newNote: '',
+        }),
+        this.getNotebooksFromAsyncStorage
+      );
       Alert.alert('Success ', 'Note Saved');
     } catch (error) {
       throw new Error('Unable to store data to async storage');
@@ -115,11 +133,15 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
   };
 
   onNotePress = async (e: GestureResponderEvent, index: number) => {
-    console.log('pressed ', index);
-    this.props.navigation.navigate('NotesModal');
+    const { itemIndex, notebooks } = this.state;
+    this.props.navigation.navigate('NotesModal', {
+      noteIndex: index,
+      notebookIndex: itemIndex,
+      note: notebooks[itemIndex].notes[index],
+    });
   };
 
-  renderNotebook = (item: any, index: any) => {
+  renderNotebook = (item: Note, index: any) => {
     return (
       <NotebookRow
         item={item}
@@ -130,6 +152,8 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
       />
     );
   };
+
+  keyExtractor = (item: Note, index: number) => String(index);
 
   render() {
     const { notes, newNote } = this.state;
@@ -155,6 +179,7 @@ class NotesScreen extends React.Component<NotesScreenProps, NotesScreenState> {
               keyboardShouldPersistTaps={'always'}
               data={notes}
               renderItem={({ item, index }) => this.renderNotebook(item, index)}
+              keyExtractor={this.keyExtractor}
             />
           </View>
         )}

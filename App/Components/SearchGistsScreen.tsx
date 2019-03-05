@@ -1,9 +1,11 @@
 import React from 'react';
 import {
   ActivityIndicator,
+  NativeSyntheticEvent,
   StyleSheet,
   Text,
   TextInput,
+  TextInputChangeEventData,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -32,7 +34,9 @@ class SearchGistsScreen extends React.Component<
     gistId: '',
   };
 
-  onGistTextInputChange = ({ nativeEvent: { text } }) => {
+  onGistTextInputChange = ({
+    nativeEvent: { text },
+  }: NativeSyntheticEvent<TextInputChangeEventData>) => {
     this.setState(() => ({ gistId: text }));
   };
 
@@ -144,5 +148,5 @@ const mapDispatchToProps = dispatch => {
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(SearchGistsScreen);

@@ -22,14 +22,17 @@ class LandingScreen extends React.Component<
   state = {
     showWeb: false,
   };
+
   navigateToLogin = () => {
     // return <MyWeb />;
     // this.setState({ showWeb: true });
     this.props.navigation.navigate('LoginScreen');
   };
+
   navigateToSearchPage = () => {
     this.props.navigation.navigate('SearchGists');
   };
+
   render() {
     const { showWeb } = this.state;
     return (
